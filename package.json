@@ -1,0 +1,17 @@
+{
+  "name": "alexa-musicbot",
+  "version": "1.0.0",
+  "description": "Production-ready modular Discord music bot (CommonJS) using discord.js v14, Kazagumo, and Shoukaku.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "kazagumo": "^3.4.1",
+    "musicard": "^2.0.5",
+    "shoukaku": "^4.1.0"
+  }
+}
