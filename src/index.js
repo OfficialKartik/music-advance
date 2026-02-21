@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 const config = require('./config');
-const MusicEngine = require('./managers/voiceManager');
+const MusicEngine = require('./managers/musicEngine');
 client.music = new MusicEngine(client);
 
 // Minimal bootstrap: no business logic here.
