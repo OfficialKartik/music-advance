@@ -21,14 +21,14 @@ const ensureVoice = (message) => {
   return voice;
 };
 
-const ensureSameVoice = (message, player) => {
+const ensureSameVoice = (message) => {
   const userChannel = message.member?.voice?.channel;
   if (!userChannel) {
     sendError(message, 'You need to be in a voice channel to use this command.');
     return false;
   }
 
-  const botChannelId = player?.voiceId || message.guild.members.me?.voice?.channelId;
+  const botChannelId = message.guild.members.me?.voice?.channelId;
   if (botChannelId && botChannelId !== userChannel.id) {
     sendError(message, 'You must be in the same voice channel as the bot.');
     return false;
@@ -37,13 +37,13 @@ const ensureSameVoice = (message, player) => {
   return true;
 };
 
-const ensureSameVoiceInteraction = (interaction, player) => {
+const ensureSameVoiceInteraction = (interaction) => {
   const userChannel = interaction.member?.voice?.channel;
   if (!userChannel) {
     return { ok: false, reason: 'You need to be in a voice channel to use this button.' };
   }
 
-  const botChannelId = player?.voiceId || interaction.guild.members.me?.voice?.channelId;
+  const botChannelId = interaction.guild.members.me?.voice?.channelId;
   if (botChannelId && botChannelId !== userChannel.id) {
     return { ok: false, reason: 'You must be in the same voice channel as the bot.' };
   }
