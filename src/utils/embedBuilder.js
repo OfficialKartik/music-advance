@@ -8,45 +8,45 @@ const formatDuration = (ms) => {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 };
 
-const formatLoop = (player) => {
-  const loop = player.loop ?? player.loopMode ?? 'off';
-  if (typeof loop === 'string') return loop === 'none' ? 'off' : loop;
-  if (loop === 1) return 'track';
-  if (loop === 2) return 'queue';
-  return 'off';
-};
+const buildNowPlayingEmbed = (client, state) => {
+  const track = state.current;
 
-const buildNowPlayingEmbed = (client, player, track) => {
-  const autoplay = player.data.get('autoplay') === true ? 'ON' : 'OFF';
+  if (!track) {
+    return new EmbedBuilder()
+      .setColor(client.config.embed.primary)
+      .setTitle('🎵 Now Playing')
+      .setDescription('Nothing is currently playing.');
+  }
+
   const description = [
     `**${track.title || 'Unknown Track'}**`,
     `Author: ${track.author || 'Unknown'}`,
-    `Duration: ${formatDuration(track.length)}`,
-    `Volume: ${player.volume ?? 100}%`,
-    `Loop: ${formatLoop(player)}`,
-    `Autoplay: ${autoplay}`,
+    `Volume: ${state.volume ?? 100}%`,
+    `Bass: ${state.filters.bass}`,
+    `Speed: ${state.filters.speed}`,
+    `Nightcore: ${state.filters.nightcore ? 'ON' : 'OFF'}`,
   ].join('\n');
 
   return new EmbedBuilder()
     .setColor(client.config.embed.primary)
-    .setTitle('?? Now Playing')
+    .setTitle('🎵 Now Playing')
     .setDescription(description);
 };
 
-const buildQueueEmbed = (client, player, tracks, page, totalPages) => {
+const buildQueueEmbed = (client, state, tracks, page, totalPages) => {
   const description = tracks.length
     ? tracks
-        .map((track, index) => `**${index + 1}.** ${track.title} � ${formatDuration(track.length)}`)
+        .map((track, index) => `**${index + 1}.** ${track.title}`)
         .join('\n')
     : 'Queue is empty.';
 
-  const current = player.queue.current
-    ? `**Now Playing:** ${player.queue.current.title}`
+  const current = state.current
+    ? `**Now Playing:** ${state.current.title}`
     : 'Nothing is playing.';
 
   return new EmbedBuilder()
     .setColor(client.config.embed.primary)
-    .setTitle('?? Queue')
+    .setTitle('🎶 Queue')
     .setDescription(`${current}\n\n${description}`)
     .setFooter({ text: `Page ${page}/${totalPages}` });
 };
@@ -59,7 +59,6 @@ const buildErrorEmbed = (message) => (
 );
 
 module.exports = {
-  formatDuration,
   buildNowPlayingEmbed,
   buildQueueEmbed,
   buildErrorEmbed,
